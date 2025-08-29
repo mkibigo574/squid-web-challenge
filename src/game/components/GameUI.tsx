@@ -44,9 +44,6 @@ export const GameUI = ({
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-auto">
         {gameState === 'waiting' && (
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-white mb-8">Red Light, Green Light</h1>
-            <p className="text-xl text-white mb-4">Move during GREEN LIGHT, freeze during RED LIGHT!</p>
-            <p className="text-lg text-white mb-8">Use WASD or Arrow Keys to move</p>
             <Button onClick={onStartGame} size="lg" className="text-xl px-8 py-4">
               Start Game
             </Button>
@@ -80,6 +77,15 @@ export const GameUI = ({
             </Button>
           </div>
         )}
+      </div>
+
+      {/* Instructions (bottom-left) */}
+      <div className="absolute bottom-4 left-4 max-w-sm pointer-events-none">
+        <div className="bg-black/50 text-white px-4 py-3 rounded-lg leading-snug">
+          <div className="font-bold">Red Light, Green Light</div>
+          <div className="text-sm">Move during GREEN LIGHT, freeze during RED LIGHT!</div>
+          <div className="text-sm">Use WASD or Arrow Keys to move</div>
+        </div>
       </div>
 
       {/* Bottom UI */}

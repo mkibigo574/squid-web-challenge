@@ -32,7 +32,7 @@ export const ModelTester = () => {
   };
 
   return (
-    <div className="fixed top-4 right-4 bg-black/80 text-white p-4 rounded-lg max-w-sm z-50">
+    <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg max-w-sm z-50">
       <h3 className="text-lg font-bold mb-2">Model Loader Tester</h3>
       <button 
         onClick={testAllModels}

@@ -19,20 +19,20 @@ export const Environment = () => {
         shadow-camera-bottom={-10}
       />
 
-      {/* Ground */}
-      <mesh receiveShadow position={[0, -0.5, 10]} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* Ground at y=0 */}
+      <mesh receiveShadow position={[0, 0, 10]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[40, 40]} />
         <meshLambertMaterial color="#4a7c4a" />
       </mesh>
 
-      {/* Start line */}
-      <mesh position={[0, 0.01, -4.5]}>
+      {/* Start line at z = -5 */}
+      <mesh position={[0, 0.01, -5]}>
         <boxGeometry args={[20, 0.1, 0.5]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
 
-      {/* Finish line */}
-      <mesh position={[0, 0.01, 25.5]}>
+      {/* Finish line at z = 25 */}
+      <mesh position={[0, 0.01, 25]}>
         <boxGeometry args={[20, 0.1, 0.5]} />
         <meshBasicMaterial color="#ff0000" />
       </mesh>

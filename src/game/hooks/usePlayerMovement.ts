@@ -7,14 +7,24 @@ export const usePlayerMovement = (
   lightState: LightState,
   onElimination: () => void,
   onPositionUpdate: (position: number) => void,
-  gameActive: boolean
+  gameActive: boolean,
+  onMoveChange?: (isMoving: boolean) => void
 ) => {
   const playerGroupRef = useRef<THREE.Group>(null);
   const velocityRef = useRef(new THREE.Vector3(0, 0, 0));
   const keysPressed = useRef<Set<string>>(new Set());
   const wasMovingDuringRedLight = useRef(false);
+  const lastMovingRef = useRef<boolean>(false);
 
-  const MOVE_SPEED = 8;
+  // World and speed scaling
+  const START_Z = -5;
+  const FINISH_Z = 25;
+  const FIELD_LENGTH_UNITS = FINISH_Z - START_Z; // 30 units
+  const FIELD_LENGTH_METERS = 400; // approximate 400m track
+  const HUMAN_RUN_MPS = 6; // ~6 m/s (fast jog)
+  const UNITS_PER_SEC = HUMAN_RUN_MPS / (FIELD_LENGTH_METERS / FIELD_LENGTH_UNITS); // ≈ 0.45 units/s
+
+  const MOVE_SPEED = UNITS_PER_SEC;
   const FRICTION = 0.9;
 
   useEffect(() => {
@@ -45,11 +55,12 @@ export const usePlayerMovement = (
     // Calculate movement based on input
     const moveVector = new THREE.Vector3(0, 0, 0);
     
+    // Forward is +Z toward the finish line; back is -Z
     if (keysPressed.current.has('KeyW') || keysPressed.current.has('ArrowUp')) {
-      moveVector.z -= 1;
+      moveVector.z += 1;
     }
     if (keysPressed.current.has('KeyS') || keysPressed.current.has('ArrowDown')) {
-      moveVector.z += 1;
+      moveVector.z -= 1;
     }
     if (keysPressed.current.has('KeyA') || keysPressed.current.has('ArrowLeft')) {
       moveVector.x -= 1;
@@ -63,6 +74,10 @@ export const usePlayerMovement = (
 
     // Check for movement during red light
     const isMoving = moveVector.length() > 0;
+    if (onMoveChange && isMoving !== lastMovingRef.current) {
+      lastMovingRef.current = isMoving;
+      onMoveChange(isMoving);
+    }
     
     if (lightState === 'red' && isMoving) {
       wasMovingDuringRedLight.current = true;
@@ -88,15 +103,25 @@ export const usePlayerMovement = (
     // Apply friction
     velocity.multiplyScalar(FRICTION);
 
-    // Update position
-    playerGroup.position.add(velocity);
+    // Update position (XZ only). Keep Y fixed to stand on ground.
+    playerGroup.position.x += velocity.x;
+    playerGroup.position.z += velocity.z;
+    playerGroup.position.y = 1;
 
-    // Constrain movement
+    // Constrain movement: track spans z in [-5, 25]
     playerGroup.position.x = Math.max(-10, Math.min(10, playerGroup.position.x));
-    playerGroup.position.z = Math.max(-5, Math.min(25, playerGroup.position.z));
+    if (playerGroup.position.z >= FINISH_Z) {
+      // Snap to finish and face backward
+      playerGroup.position.z = FINISH_Z;
+      playerGroup.rotation.y = Math.PI; // turn around
+      velocity.set(0, 0, 0);
+    } else {
+      playerGroup.position.z = Math.max(START_Z, Math.min(FINISH_Z, playerGroup.position.z));
+    }
 
     // Update game position (forward progress)
-    onPositionUpdate(Math.max(0, 5 + playerGroup.position.z));
+    // Progress is distance from start line at z=-5 toward finish at z=25 → [0..30]
+    onPositionUpdate(Math.max(0, playerGroup.position.z - (-5)));
   });
 
   return { playerGroupRef };

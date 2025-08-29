@@ -10,7 +10,7 @@ export const useGame = () => {
   const [playerPosition, setPlayerPosition] = useState(0);
   const [countdown, setCountdown] = useState(3);
   
-  const FINISH_LINE = 30;
+  const FINISH_LINE = 30; // distance from start (z=-5) to finish (z=25)
   const GAME_DURATION = 60;
 
   const startGame = useCallback(() => {
@@ -66,18 +66,26 @@ export const useGame = () => {
     }
   }, [gameState, timeLeft]);
 
-  // Doll state changes
+  // Doll state changes with minimum dwell time per state
   useEffect(() => {
-    if (gameState === 'playing') {
-      const changeLight = () => {
-        const randomDuration = Math.random() * 3000 + 3000; // 3-6 seconds
-        setLightState(prev => prev === 'green' ? 'red' : 'green');
-        setTimeout(changeLight, randomDuration);
-      };
-      
-      const initialDelay = setTimeout(changeLight, Math.random() * 3000 + 3000);
-      return () => clearTimeout(initialDelay);
-    }
+    if (gameState !== 'playing') return;
+
+    let timeoutId: number | undefined;
+
+    const scheduleNext = () => {
+      // At least 2–3+ seconds per state (2–4s random window)
+      const dwellMs = 2000 + Math.random() * 2000;
+      timeoutId = window.setTimeout(() => {
+        setLightState(prev => (prev === 'green' ? 'red' : 'green'));
+        scheduleNext();
+      }, dwellMs);
+    };
+
+    scheduleNext();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [gameState]);
 
   return {
