@@ -1,6 +1,6 @@
 export const MODEL_CONFIG = {
   player: {
-    path: '/models/player.glb',
+    path: "/models/player.glb",
     scale: 1.0,
     position: [0, 0, 0],
     rotation: [0, 0, 0],
