@@ -133,10 +133,6 @@ Static output is generated under `dist/` and can be served by any static host (N
 - Performance issues: reduce model polycount, limit shadows, or lower render distance in the scene.
 
 
-## License
-
-MIT — see `LICENSE` if present. Replace with your preferred license as needed.
-
 
 ## Acknowledgements
 
