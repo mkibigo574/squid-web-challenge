@@ -93,6 +93,10 @@ Open the app at the URL shown in the terminal (typically `http://localhost:5173`
 - **Detection**: If you move when the doll is facing you, you lose.
 - **Win Condition**: Reach the finish line while obeying stop/go rules.
 
+## Gameplay Videos
+
+Videos of the current gameplay can be viewed here: [Gameplay Demo](https://charlesdarwinuni-my.sharepoint.com/:v:/g/personal/s363610_students_cdu_edu_au/EQXS8XCHTOBKv1h2wU3oKEkBHVnVkYws5y0CqamRZYo2Ww?email=reem.sherif%40cdu.edu.au&e=fizOhS)
+
 
 ## Assets
 
@@ -132,7 +136,17 @@ Static output is generated under `dist/` and can be served by any static host (N
 - Animation not playing: confirm clip names match what components expect.
 - Performance issues: reduce model polycount, limit shadows, or lower render distance in the scene.
 
+## What's Next
 
+- **3D Assets and animation design**: Add player movement, add different skins for multiplayer, enhance general appearance
+- **Enhanced Gameplay**: Add multiple difficulty levels, time limits, and scoring system
+- **Audio**: Implement sound effects for movement detection, background music, and voice cues
+- **Multiplayer**: Add online multiplayer support with real-time synchronization
+- **Mobile Support**: Optimize controls and UI for touch devices
+- **Advanced Graphics**: Add particle effects, better lighting, and post-processing
+- **Game Modes**: Implement different variations (reverse mode, team play, etc.)
+- **Analytics**: Track player performance and game statistics
+- **Accessibility**: Add colorblind support, keyboard navigation, and screen reader compatibility
 
 ## Acknowledgements
 
